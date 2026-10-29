@@ -650,6 +650,43 @@ INSERT INTO convocatoria (id_convocatoria, id_partido, id_inscripcion, es_titula
 (6, 6, 5, FALSE, NULL, 'Partido aplazado.');
 
 -- =====================================================================
+-- DATOS FICTICIOS ADICIONALES (aporte de Omar Agámez)
+-- IDs desde 101 para no chocar con los datos existentes
+-- =====================================================================
+
+INSERT INTO persona (id_persona, tipo_documento, num_documento, nombres, apellidos, fecha_nacimiento, genero, rh, eps, telefono, correo, direccion, estado, fecha_registro) VALUES
+(111, 'CC', '1065002111', 'Jorge Enrique',   'Maestre Sierra',   '1981-03-08', 'MASCULINO', 'A+', 'Nueva EPS',   '3012223411', 'jorge.maestre@correo.com', 'Calle 12 # 9-18, Valledupar', 'ACTIVO', '2026-09-28 09:00:00'),
+(112, 'CC', '1065002112', 'Luz Marina',      'Orozco Pava',      '1983-09-27', 'FEMENINO',  'B+', 'Salud Total', '3012223412', 'luz.orozco@correo.com',    'Cra 11 # 22-05, Valledupar',  'ACTIVO', '2026-09-28 09:10:00'),
+(121, 'TI', '1100200121', 'Juan Esteban',    'Maestre Villazón', '2013-04-12', 'MASCULINO', 'A+', 'Nueva EPS',   '3012223411', NULL,                       'Calle 12 # 9-18, Valledupar', 'ACTIVO', '2026-10-01 10:00:00'),
+(122, 'TI', '1100200122', 'Sofía Alejandra', 'Gutiérrez Orozco', '2015-09-30', 'FEMENINO',  'B+', 'Salud Total', '3012223412', NULL,                       'Cra 11 # 22-05, Valledupar',  'ACTIVO', '2026-10-01 10:05:00');
+
+INSERT INTO acudiente (id_acudiente, ocupacion, telefono_alterno) VALUES
+(111, 'Arquitecto', '3104445611'),
+(112, 'Abogada',    NULL);
+
+INSERT INTO estudiante (id_estudiante, id_acudiente, parentesco_acudiente, fecha_ingreso_club, estado) VALUES
+(121, 111, 'padre', '2026-10-01', 'ACTIVO'),
+(122, 112, 'madre', '2026-10-01', 'ACTIVO');
+
+INSERT INTO inscripcion (id_inscripcion, id_estudiante, id_grupo, fecha_inscripcion, fecha_finalizacion, mensualidad_pactada, estado) VALUES
+(101, 121, 4, '2026-10-01', NULL, 120000.00, 'ACTIVA'),
+(102, 122, 1, '2026-10-01', NULL,  80000.00, 'ACTIVA');
+
+INSERT INTO pago (id_pago, id_inscripcion, id_beca_inscripcion, periodo_anio, periodo_mes, valor, valor_descuento, fecha_vencimiento, fecha_pago, metodo_pago, estado) VALUES
+(101, 101, NULL, 2026, 10, 120000.00, 0, '2026-10-05', '2026-10-03', 'TRANSFERENCIA', 'PAGADO'),
+(102, 102, NULL, 2026, 11,  80000.00, 0, '2026-11-05', NULL,         NULL,            'PENDIENTE');
+
+INSERT INTO entrenamiento (id_entrenamiento, id_grupo, id_entrenador, id_escenario, fecha, hora_inicio, hora_finalizacion, estado, observaciones) VALUES
+(101, 4, 4, 4, '2026-10-16', '15:30', '17:00', 'REALIZADO', NULL);
+
+INSERT INTO asistencia (id_asistencia, id_inscripcion, id_entrenamiento, estado_asistencia, fecha_registro) VALUES
+(101, 101, 101, 'ASISTIO', '2026-10-16 17:05:00');
+
+INSERT INTO certificado_medico (id_certificado, id_estudiante, fecha_expedicion, fecha_vencimiento, entidad_emisora, concepto, restricciones, estado) VALUES
+(101, 121, '2026-09-20', '2027-09-20', 'Clínica Valledupar', 'APTO', NULL, 'VIGENTE'),
+(102, 122, '2026-09-20', '2027-09-20', 'IPS Salud Total',    'APTO', NULL, 'VIGENTE');
+
+-- =====================================================================
 -- PRUEBA DE ERRORES
 -- Cada sentencia debe FALLAR a propósito. Ejecutarlas una por una.
 -- =====================================================================
