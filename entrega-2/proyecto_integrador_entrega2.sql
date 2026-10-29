@@ -560,7 +560,7 @@ INSERT INTO beca_inscripcion (id_beca_inscripcion, id_inscripcion, id_beca, fech
 (6, 6, 1, '2026-03-01', '2026-05-31', 'REVOCADA',   'Dejó de cumplir la condición deportiva.');
 
 
-_inscripcion, id_beca_inscripcion, periodo_anio, periodo_mes, valor, valor_descuento, fecha_vencimiento, fecha_pago, metodo_pago, estado) VALUES
+INSERT INTO pago (id_pago, id_inscripcion, id_beca_inscripcion, periodo_anio, periodo_mes, valor, valor_descuento, fecha_vencimiento, fecha_pago, metodo_pago, estado) VALUES
 (1,  1, 4,    2026, 9,  68000.00, 12000.00, '2026-09-05', '2026-09-03', 'TRANSFERENCIA', 'PAGADO'),
 (2,  1, 4,    2026, 10, 68000.00, 12000.00, '2026-10-05', NULL,         NULL,            'PENDIENTE'),
 (3,  2, 3,    2026, 10, 59500.00, 10500.00, '2026-10-05', '2026-10-02', 'EFECTIVO',      'PAGADO'),
