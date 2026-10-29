@@ -648,3 +648,141 @@ INSERT INTO convocatoria (id_convocatoria, id_partido, id_inscripcion, es_titula
 (4, 4, 4, TRUE,  100,  NULL),
 (5, 5, 4, FALSE, NULL, 'Convocada para el próximo partido.'),
 (6, 6, 5, FALSE, NULL, 'Partido aplazado.');
+
+-- =====================================================================
+-- PRUEBA DE ERRORES
+-- Cada sentencia debe FALLAR a propósito. Ejecutarlas una por una.
+-- =====================================================================
+
+
+-- PRUEBA 1 - Debe fallar: RN-01 (uq_persona_documento)
+-- Documento repetido: 1065001001 ya pertenece a la persona 1.
+INSERT INTO persona (
+    id_persona, tipo_documento, num_documento, nombres,
+    apellidos, fecha_nacimiento, genero, telefono,
+    direccion, fecha_registro
+)
+VALUES (
+    99, 'CC', '1065001001', 'Persona', 'Repetida',
+    '1990-01-01', 'OTRO', '3000000000',
+    'Calle 1 # 1-1', '2026-10-26 09:00:00'
+);
+
+
+-- PRUEBA 2 - Debe fallar: RN-11 (ck_pago_estado_datos)
+-- Pago PAGADO sin fecha_pago ni metodo_pago.
+INSERT INTO pago (
+    id_pago, id_inscripcion, periodo_anio, periodo_mes,
+    valor, fecha_vencimiento, estado
+)
+VALUES (
+    99, 3, 2026, 9, 120000.00,
+    '2026-09-05', 'PAGADO'
+);
+
+
+-- PRUEBA 3 - Debe fallar: RN-09 (uq_pago_periodo)
+-- La inscripción 4 ya tiene pago para 2026-10 (pago 5).
+INSERT INTO pago (
+    id_pago, id_inscripcion, periodo_anio, periodo_mes,
+    valor, fecha_vencimiento, estado
+)
+VALUES (
+    99, 4, 2026, 10, 90000.00,
+    '2026-10-05', 'PENDIENTE'
+);
+
+
+-- PRUEBA 4 - Debe fallar: RN-13 (fk_pago_inscripcion, ON DELETE RESTRICT)
+-- La inscripción 1 tiene pagos asociados.
+DELETE FROM inscripcion
+WHERE id_inscripcion = 1;
+
+
+-- PRUEBA 5 - Debe fallar: fk_estudiante_persona (ON DELETE RESTRICT)
+-- La persona 21 es un estudiante registrado.
+DELETE FROM persona
+WHERE id_persona = 21;
+
+
+-- PRUEBA 6 - Debe fallar: NOT NULL en grupo.id_entrenador
+INSERT INTO grupo (
+    id_grupo, id_deporte, id_categoria,
+    id_entrenador, nombre, cupo_maximo
+)
+VALUES (
+    99, 3, 3, NULL, 'Voleibol Sub-12 A', 12
+);
+
+
+-- PRUEBA 7 - Debe fallar: RN-07 (ck_categoria_edades)
+-- edad_minima (15) mayor que edad_maxima (10).
+INSERT INTO categoria (
+    id_categoria, nombre, edad_minima, edad_maxima
+)
+VALUES (
+    99, 'Sub-99', 15, 10
+);
+
+
+-- PRUEBA 8 - Debe fallar: RN-23 (ck_partido_escenario)
+-- Partido LOCAL sin escenario.
+INSERT INTO partido (
+    id_partido, id_torneo, id_grupo, id_escenario,
+    rival, condicion, fecha, hora_inicio,
+    hora_finalizacion, estado
+)
+VALUES (
+    99, 1, 1, NULL, 'Rival Sin Cancha', 'LOCAL',
+    '2026-12-01', '10:00', '11:30', 'PROGRAMADO'
+);
+
+
+-- PRUEBA 9 - Debe fallar: RN-27 (ck_beca_porcentaje)
+-- Descuento de 100 % (máximo permitido: 90).
+INSERT INTO beca (
+    id_beca, nombre, tipo_beca, porcentaje_descuento
+)
+VALUES (
+    99, 'Beca Total', 'OTRA', 100.00
+);
+
+
+-- PRUEBA 10 - Debe fallar: RN-29 (ck_pago_beca)
+-- Pago con descuento pero sin beca aplicada.
+INSERT INTO pago (
+    id_pago, id_inscripcion, id_beca_inscripcion,
+    periodo_anio, periodo_mes, valor, valor_descuento,
+    fecha_vencimiento, estado
+)
+VALUES (
+    99, 3, NULL, 2026, 12, 100000.00, 20000.00,
+    '2026-12-05', 'PENDIENTE'
+);
+
+
+-- =====================================================================
+-- VISTAZO DE TABLAS
+-- Verifica que las pruebas fallidas no modificaron ningún dato.
+-- =====================================================================
+SELECT * FROM persona;
+SELECT * FROM entrenador;
+SELECT * FROM acudiente;
+SELECT * FROM estudiante;
+SELECT * FROM deporte;
+SELECT * FROM categoria;
+SELECT * FROM escenario;
+SELECT * FROM grupo;
+SELECT * FROM horario_grupo;
+SELECT * FROM beca;
+SELECT * FROM inscripcion;
+SELECT * FROM beca_inscripcion;
+SELECT * FROM pago;
+SELECT * FROM entrenamiento;
+SELECT * FROM asistencia;
+SELECT * FROM certificado_medico;
+SELECT * FROM lesion;
+SELECT * FROM evaluacion_fisica;
+SELECT * FROM torneo;
+SELECT * FROM partido;
+SELECT * FROM convocatoria;
